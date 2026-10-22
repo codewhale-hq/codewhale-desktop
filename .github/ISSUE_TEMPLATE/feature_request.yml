@@ -1,0 +1,53 @@
+name: Feature request
+description: Suggest an idea or an improvement for the desktop app. 功能建议。
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. English or 中文 are both fine. Short is good.
+
+        If someone already asked for this, add a 👍 to their issue instead.
+        Ideas for the `codewhale` command line or terminal app belong in the [Codewhale Engine repository](https://github.com/codewhale-hq/Codewhale/issues).
+
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Before you start 开始之前
+      options:
+        - label: I searched existing issues and this is not a duplicate. 我已搜索过现有 issue。
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve? 要解决什么问题？
+      description: What are you trying to do, and what gets in the way today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What should the app do? 希望应用怎么做？
+      description: The behavior you want. A sketch or screenshot helps.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform 平台
+      description: Pick all that apply.
+      multiple: true
+      options:
+        - All platforms
+        - macOS
+        - Windows
+        - Linux
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Workarounds or other tools (optional) 现有替代方案（可选）
+      description: What you do today, or how another app handles it.

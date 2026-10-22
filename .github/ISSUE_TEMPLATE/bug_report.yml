@@ -1,0 +1,154 @@
+name: Bug report
+description: Something in the desktop app is broken or behaves wrong. 报告桌面应用的问题。
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing. English or 中文 are both fine.
+
+        **Never paste API keys, tokens or passwords into an issue. 不要在 issue 中粘贴 API 密钥、令牌或密码。**
+        Issues are public. Check logs, screenshots and config before you post them.
+
+        - Security problem? Don't post it here. Use a [private advisory](https://github.com/codewhale-hq/codewhale-desktop/security/advisories/new).
+        - Problem with the `codewhale` command line or terminal app? Report it in the [Codewhale Engine repository](https://github.com/codewhale-hq/Codewhale/issues).
+        - Already reported? Add a 👍 to that issue instead of opening a new one.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you start 开始之前
+      options:
+        - label: I searched existing issues and this is not a duplicate. 我已搜索过现有 issue。
+          required: true
+        - label: I removed API keys, tokens and passwords from everything I paste. 我已删除所有粘贴内容中的密钥、令牌和密码。
+          required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened? 发生了什么？
+      description: What you saw. Paste error text as text, not only a screenshot.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect? 你预期的结果是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce 复现步骤
+      description: What you clicked or typed, in order. Shorter is better.
+      placeholder: |
+        1. Open Codewhale
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform 平台
+      options:
+        - macOS (Apple silicon)
+        - Windows (x64)
+        - Linux (x64)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating system version 操作系统版本
+      description: On Linux, also say X11 or Wayland.
+      placeholder: macOS 15.1 / Windows 11 24H2 / Ubuntu 24.04 (Wayland)
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Finding the versions 查看版本
+
+        Open **About**. On macOS, use the **Codewhale** menu → **About**. On any platform, open the command palette (**Cmd+Shift+P** on macOS, **Ctrl+Shift+P** on Windows and Linux) and choose **About**. It opens **Settings → Advanced → About**.
+
+        打开“关于”：在 macOS 上选择 **Codewhale** 菜单 →“关于”；在任何平台上，打开命令面板（macOS 按 **Cmd+Shift+P**，Windows 和 Linux 按 **Ctrl+Shift+P**），选择“关于”。它会打开“设置 → 高级 → 关于”。
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App version 应用版本
+      description: The **Codewhale desktop app** row. If About doesn't show it, use the version of the release you downloaded. 即“Codewhale 桌面应用”一行；如果“关于”中没有显示，请填写你下载的版本号。
+      placeholder: "0.10.2"
+    validations:
+      required: true
+
+  - type: input
+    id: engine-version
+    attributes:
+      label: Bundled Engine version 内置 Engine 版本
+      description: The **Codewhale runtime** row, with the build shown under it. About shows it only while the Engine is running. If it is missing, write "not shown". 即“Codewhale 运行时”一行及其下方的构建号。只有 Engine 运行时“关于”才会显示；如果没有显示，请填写“not shown”。
+      placeholder: "0.10.1, build fead51eeea0f"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where in the app? 在应用的哪个部分？
+      multiple: true
+      options:
+        - Install or first launch
+        - Sign in or account
+        - Conversation or composer
+        - Approvals
+        - Models and provider keys
+        - Files, Review or Terminal
+        - Computer panel
+        - Skills
+        - Settings
+        - Keyboard shortcuts
+        - Other / not sure
+
+  - type: input
+    id: model
+    attributes:
+      label: Provider and model (optional) 服务商和模型（可选）
+      description: Only the names. Never the key. 只填名称，不要填密钥。
+      placeholder: "provider / model id"
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Logs 日志
+
+        The easiest way is **Export logs**: open the command palette and choose **Export logs**, or on macOS use **Help → Export logs**. It saves a copy with secrets redacted to this folder:
+
+        - macOS and Linux: `~/.codewhale/diagnostics-exports/`
+        - Windows: `%USERPROFILE%\.codewhale\diagnostics-exports\`
+
+        Raw logs are in the `logs` folder and crash captures in the `crashes` folder, inside the same `.codewhale` folder. On macOS, `.codewhale` is hidden: in Finder, choose **Go → Go to Folder…** and type `~/.codewhale`. If you set `CODEWHALE_HOME`, look there instead.
+
+        **Redaction can miss things. Read the file and remove API keys, tokens and private content before you paste it.**
+
+        最简单的方法是“导出日志”：在命令面板中选择“导出日志”，或在 macOS 上选择“帮助 → 导出日志”。脱敏副本保存在上面列出的 `diagnostics-exports` 文件夹中。**脱敏可能有遗漏，粘贴前请检查并删除密钥、令牌和私人内容。**
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log lines (optional) 相关日志（可选）
+      description: Paste only the lines around the problem.
+      render: text
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else (optional) 截图或其他信息（可选）
+      description: A screenshot or recording, the interface language, or a guess at the cause.

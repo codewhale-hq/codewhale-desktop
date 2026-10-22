@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/codewhale-hq/codewhale-desktop/security/advisories/new
+    about: Report security problems privately, not in a public issue. 请私下报告安全问题。
+  - name: Codewhale Engine and CLI issues
+    url: https://github.com/codewhale-hq/Codewhale/issues
+    about: Problems with the codewhale command line or terminal app go to the Engine repository. 命令行和终端应用的问题请提交到 Engine 仓库。
