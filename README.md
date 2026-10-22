@@ -2,9 +2,14 @@
 
 The Codewhale desktop app for macOS, Windows and Linux.
 
-Codewhale runs on your computer with your own model provider key. You don't
-need a Codewhale account to use the desktop app: your key stays on your
-machine, and your provider bills you directly for what you use.
+Codewhale runs on your computer with your own model provider key. The
+desktop app needs a free Codewhale account: choose **Sign in** or **Create
+account** and finish in your browser. Your model key stays on your computer,
+and your provider bills you directly for what you use. The `codewhale`
+terminal app works without an account.
+
+Codewhale computers, cloud computers your agents can work on, are
+invite-only for now.
 
 > **Status: preview.** The source code will be published here soon. Until
 > then, this repository hosts preview builds for testers and the place to

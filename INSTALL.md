@@ -29,8 +29,10 @@ This build is not signed. It needs a desktop session (X11 or Wayland).
 
 ## First run
 
-Codewhale asks you to connect a model provider. Add your own API key in
-Settings, Models. The key is stored on your computer.
+On first launch, Codewhale asks you to sign in to a free Codewhale account.
+Choose **Sign in** or **Create account** and finish in your browser. Then
+connect a model provider: add your own API key in Settings, Models. The key is
+stored on your computer.
 
 ## Updates
 
