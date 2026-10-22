@@ -1,0 +1,8 @@
+Codewhale Desktop
+Copyright 2026 Codewhale Contributors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Release builds bundle the Codewhale Engine (https://github.com/codewhale-hq/Codewhale),
+which is distributed under the MIT License, and third-party components whose
+notices ship with each build.
