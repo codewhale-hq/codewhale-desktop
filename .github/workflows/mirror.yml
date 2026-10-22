@@ -1,0 +1,83 @@
+name: Mirror to CNB and GitCode
+
+# One-way mirrors of this repository for people who reach China-hosted Git
+# services more easily than GitHub. GitHub is the source of truth: the mirrors
+# receive main and desktop-v* tags and are force-updated to match.
+#
+# Each job needs a repository secret. Until it is set the job skips with a
+# warning instead of failing:
+#   CNB_GIT_TOKEN  -> cnb.cool/${CNB_REPOSITORY}
+#   GITCODE_TOKEN  -> gitcode.com/${GITCODE_REPOSITORY}
+# Targets can be changed with the repository variables CNB_REPOSITORY,
+# GITCODE_REPOSITORY and GITCODE_USERNAME.
+
+on:
+  push:
+    branches: [main]
+    tags: ['desktop-v*']
+  workflow_dispatch: {}
+
+concurrency:
+  group: mirror-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  cnb:
+    if: github.repository_owner == 'codewhale-hq'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to CNB
+        env:
+          CNB_TOKEN: ${{ secrets.CNB_GIT_TOKEN }}
+          CNB_REPOSITORY: ${{ vars.CNB_REPOSITORY || 'codewhale.net/codewhale-desktop' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${CNB_TOKEN:-}" ]; then
+            echo "::warning::CNB_GIT_TOKEN is not set; skipping the CNB mirror."
+            exit 0
+          fi
+          token="$(printf '%s' "${CNB_TOKEN}" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read(), safe=""))')"
+          git remote add cnb "https://cnb:${token}@cnb.cool/${CNB_REPOSITORY}.git"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            scripts/mirror-push.sh cnb "tag ${GITHUB_REF_NAME}" "${GITHUB_REF}:${GITHUB_REF}"
+          else
+            scripts/mirror-push.sh cnb "main" HEAD:refs/heads/main --force
+            scripts/mirror-push.sh cnb "desktop tags" "refs/tags/desktop-v*:refs/tags/desktop-v*"
+          fi
+
+  gitcode:
+    if: github.repository_owner == 'codewhale-hq'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to GitCode
+        env:
+          GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
+          GITCODE_USER: ${{ vars.GITCODE_USERNAME || 'HunterBown' }}
+          GITCODE_REPOSITORY: ${{ vars.GITCODE_REPOSITORY || 'HunterBown/codewhale-desktop' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${GITCODE_TOKEN:-}" ]; then
+            echo "::warning::GITCODE_TOKEN is not set; skipping the GitCode mirror."
+            exit 0
+          fi
+          encode() { printf '%s' "$1" | python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read(), safe=""))'; }
+          git remote add gitcode "https://$(encode "${GITCODE_USER}"):$(encode "${GITCODE_TOKEN}")@gitcode.com/${GITCODE_REPOSITORY}.git"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            scripts/mirror-push.sh gitcode "tag ${GITHUB_REF_NAME}" "${GITHUB_REF}:${GITHUB_REF}"
+          else
+            scripts/mirror-push.sh gitcode "main" HEAD:refs/heads/main --force
+            scripts/mirror-push.sh gitcode "desktop tags" "refs/tags/desktop-v*:refs/tags/desktop-v*"
+          fi
